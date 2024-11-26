@@ -121,7 +121,7 @@ else:
 
 
 st.subheader(eco_info)
-
+st.write(eco_details)
 
 st.markdown("---")
 st.markdown("✨ **探索自然，從身邊的植物開始！**")
