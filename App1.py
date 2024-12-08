@@ -100,7 +100,6 @@ if image is not None:
             confidence = row[4]  # 假設信心分數在第五欄
             identified_plants.add((plant_name, confidence))
 
-        
         for plant_name, confidence in identified_plants:
             st.markdown(f"**植物學名：{plant_name}** (信心分數：{confidence:.2f})")
             
