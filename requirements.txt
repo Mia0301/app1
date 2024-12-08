@@ -1,6 +1,6 @@
 torch
 ultralytics
-streamlit==1.16.0
+streamlit
 opencv-python-headless
 pillow
 numpy
