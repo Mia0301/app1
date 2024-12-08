@@ -4,3 +4,4 @@ streamlit==1.16.0
 opencv-python-headless
 pillow
 numpy
+altair.vegalite.v4
