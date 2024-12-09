@@ -76,14 +76,14 @@ if option == take_photo_label:
     camera_photo = st.camera_input("點擊下方按鈕拍照")
     if camera_photo is not None:
         image = Image.open(camera_photo)
-        st.image(image, caption="拍攝的圖片", use_column_width=True)
+        st.image(image, caption="拍攝的圖片", width=300)
 
 elif option == upload_label:
     st.subheader("📤 上傳圖片")
     uploaded_file = st.file_uploader("選擇圖片", type=["jpg", "jpeg", "png"])
     if uploaded_file is not None:
         image = Image.open(uploaded_file)
-        st.image(image, caption="上傳的圖片", use_column_width=True)
+        st.image(image, caption="上傳的圖片", width=300)
 
 
 st.subheader(result_label)
