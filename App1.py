@@ -585,27 +585,28 @@ if image is not None:
     predictions = results[0].boxes.data.cpu().numpy()
 
     if len(predictions) > 0:
-    # 將辨識結果按信心分數排序，取準確率最高的一種
-       best_prediction = max(predictions, key=lambda row: row[4])  # 假設信心分數在第五欄
-       plant_name = model.names[int(best_prediction[5])]  # 假設類別標籤在第六欄
-       confidence = best_prediction[4]
+        # 將辨識結果按信心分數排序，取準確率最高的一種
+        best_prediction = max(predictions, key=lambda row: row[4])  # 假設信心分數在第五欄
+        plant_name = model.names[int(best_prediction[5])]  # 假設類別標籤在第六欄
+        confidence = best_prediction[4]
 
-    # 顯示最高準確率的植物資訊
-       st.markdown(f"**植物學名：{plant_name}** (信心分數：{confidence:.2f})")
-    
-            if plant_name in plant_info:
-                info = plant_info[plant_name]
-                st.write(f"🌸 中文名稱：{info['中文名稱']}")
-                st.write(f"🌿 屬性：{info['屬性']}")
-                st.write(f"🎨 花的顏色：{info['花的顏色']}")
-                st.write(f"💐 花語：{info['花語']}")
-                st.write(f"🌱 生長季節：{info['生長季節']}")
-                st.write(f"📍 分佈：{info['分佈']}")
-                st.write(f"⚠️ 毒性警告：{info['毒性警告']}")
-                st.write(f"🍴 食用安全性：{info['食用安全性']}")
-                st.write(f"💊 藥用價值：{info['藥用價值']}")
-                st.write(f"🌍 環保資訊：{info['環保資訊']}")
-                 
+        # 顯示最高準確率的植物資訊
+        st.markdown(f"**植物學名：{plant_name}** (信心分數：{confidence:.2f})")
+
+        if plant_name in plant_info:
+            info = plant_info[plant_name]
+            st.write(f"🌸 中文名稱：{info['中文名稱']}")
+            st.write(f"🌿 屬性：{info['屬性']}")
+            st.write(f"🎨 花的顏色：{info['花的顏色']}")
+            st.write(f"💐 花語：{info['花語']}")
+            st.write(f"🌱 生長季節：{info['生長季節']}")
+            st.write(f"📍 分佈：{info['分佈']}")
+            st.write(f"⚠️ 毒性警告：{info['毒性警告']}")
+            st.write(f"🍴 食用安全性：{info['食用安全性']}")
+            st.write(f"💊 藥用價值：{info['藥用價值']}")
+            st.write(f"🌍 環保資訊：{info['環保資訊']}")
+
+        # 保存結果到歷史記錄
         st.session_state["history"].append((image, [(plant_name, confidence)]))
     else:
         st.write("未能辨識出植物")
@@ -618,8 +619,8 @@ if len(st.session_state["history"]) > 0:
     for idx, (img, plants) in enumerate(st.session_state["history"]):
         with st.sidebar.expander(f"記錄 {idx + 1}"):
             st.image(img, caption="辨識圖片", use_column_width=True)
-            for plant, _ in plants:
-                st.write(f"- {plant}")
+            for plant, conf in plants:
+                st.write(f"- **{plant}** (信心分數：{conf:.2f})")
 else:
     st.sidebar.write("目前尚無辨識記錄")
 
