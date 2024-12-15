@@ -591,6 +591,7 @@ if image is not None:
        confidence = best_prediction[4]
 
     # 顯示最高準確率的植物資訊
+   for plant_name, confidence in identified_plants:
        st.markdown(f"**植物學名：{plant_name}** (信心分數：{confidence:.2f})")
     
             if plant_name in plant_info:
@@ -605,7 +606,7 @@ if image is not None:
                 st.write(f"🍴 食用安全性：{info['食用安全性']}")
                 st.write(f"💊 藥用價值：{info['藥用價值']}")
                 st.write(f"🌍 環保資訊：{info['環保資訊']}")
-                
+                 
         st.session_state["history"].append((image, identified_plants))
     else:
         st.write("未能辨識出植物")
