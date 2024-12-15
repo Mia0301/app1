@@ -584,11 +584,11 @@ if image is not None:
     results = model(image_np)
     predictions = results[0].boxes.data.cpu().numpy()
 
-  if len(predictions) > 0:
+   if len(predictions) > 0:
     # 將辨識結果按信心分數排序，取準確率最高的一種
-     best_prediction = max(predictions, key=lambda row: row[4])  # 假設信心分數在第五欄
-     plant_name = model.names[int(best_prediction[5])]  # 假設類別標籤在第六欄
-     confidence = best_prediction[4]
+      best_prediction = max(predictions, key=lambda row: row[4])  # 假設信心分數在第五欄
+      plant_name = model.names[int(best_prediction[5])]  # 假設類別標籤在第六欄
+      confidence = best_prediction[4]
 
     # 顯示最高準確率的植物資訊
     st.markdown(f"**植物學名：{plant_name}** (信心分數：{confidence:.2f})")
