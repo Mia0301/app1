@@ -585,12 +585,10 @@ if image is not None:
     predictions = results[0].boxes.data.cpu().numpy()
 
     if len(predictions) > 0:
-        identified_plants = set()
-        
-        for row in predictions:
-            plant_name = model.names[int(row[5])]  # 假設類別標籤在第六欄
-            confidence = row[4]  # 假設信心分數在第五欄
-            identified_plants.add((plant_name, confidence))
+    # 將辨識結果按信心分數排序，取準確率最高的一種
+       best_prediction = max(predictions, key=lambda row: row[4])  # 假設信心分數在第五欄
+       plant_name = model.names[int(best_prediction[5])]  # 假設類別標籤在第六欄
+       confidence = best_prediction[4]
 
         for plant_name, confidence in identified_plants:
             st.markdown(f"**植物學名：{plant_name}** (信心分數：{confidence:.2f})")
