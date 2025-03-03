@@ -640,5 +640,30 @@ if len(st.session_state["history"]) > 0:
 else:
     st.sidebar.write("目前尚無辨識記錄")
 
+if plant_name in plant_info:
+    info = plant_info[plant_name]
+    st.subheader(f"🌸 {info['中文名稱']}")
+
+    # 📌 顯示辨識結果
+    st.write(f"🔍 這是 **{plant_name}**，請確認是否正確？")
+
+    # 🔘 按鈕讓使用者確認辨識結果
+    col1, col2 = st.columns(2)
+    with col1:
+        if st.button("✅ 正確", key=f"correct_{plant_name}"):
+            st.success("感謝您的回饋！")
+
+    with col2:
+        if st.button("❌ 錯誤", key=f"incorrect_{plant_name}"):
+            st.session_state["feedback"] = st.session_state.get("feedback", {})
+            st.session_state["feedback"][plant_name] = "錯誤"
+            st.warning("請選擇正確的植物名稱")
+
+            # 📌 顯示可手動選擇的選單
+            correct_plant = st.selectbox("🔽 選擇正確的植物", list(plant_info.keys()), key=f"select_{plant_name}")
+            if st.button("提交更正", key=f"submit_{plant_name}"):
+                st.session_state["feedback"][plant_name] = correct_plant
+                st.success(f"感謝您的回饋！我們已記錄，未來會改進辨識準確度。")
+                
 st.markdown("---")
 st.markdown("✨ **探索自然，從身邊的植物開始！**")
