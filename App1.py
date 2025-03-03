@@ -630,7 +630,10 @@ else:
 st.sidebar.subheader(history_label)
 if len(st.session_state["history"]) > 0:
     for idx, (img, plants) in enumerate(st.session_state["history"]):
-        with st.sidebar.expander(f"記錄 {idx + 1}"):
+        # 取得第一個辨識出的植物名稱，若無則顯示 "未知植物"
+        plant_name = plants[0][0] if plants else "未知植物"
+
+        with st.sidebar.expander(f"🌿 {plant_name}"):
             st.image(img, caption="辨識圖片", use_column_width=True)
             for plant, conf in plants:
                 st.write(f"- **{plant}** (信心分數：{conf:.2f})")
