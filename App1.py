@@ -664,6 +664,32 @@ if plant_name in plant_info:
             if st.button("提交更正", key=f"submit_{plant_name}"):
                 st.session_state["feedback"][plant_name] = correct_plant
                 st.success(f"感謝您的回饋！我們已記錄，未來會改進辨識準確度。")
+# 初始化收藏夾
+if "favorites" not in st.session_state:
+    st.session_state["favorites"] = {}
+
+# 🔘 收藏功能
+if plant_name in plant_info:
+    if plant_name not in st.session_state["favorites"]:
+        if st.button("💾 收藏", key=f"fav_{plant_name}"):
+            st.session_state["favorites"][plant_name] = {"標籤": "", "時間": st.session_state.get("timestamp", "未記錄")}
+            st.success(f"已收藏 {plant_name}！")
+
+# 📌 側邊欄顯示收藏清單
+st.sidebar.subheader("🌱 我的收藏")
+if len(st.session_state["favorites"]) > 0:
+    for fav_plant in list(st.session_state["favorites"].keys()):
+        with st.sidebar.expander(f"📌 {fav_plant}"):
+            # ✏️ 讓使用者新增標籤
+            label = st.text_input(f"🔖 {fav_plant} 的標籤", value=st.session_state["favorites"][fav_plant]["標籤"], key=f"label_{fav_plant}")
+            st.session_state["favorites"][fav_plant]["標籤"] = label
+
+            # ❌ 取消收藏按鈕
+            if st.button(f"❌ 取消收藏", key=f"remove_{fav_plant}"):
+                del st.session_state["favorites"][fav_plant]
+                st.experimental_rerun()
+else:
+    st.sidebar.write("尚未收藏任何植物")
                 
 st.markdown("---")
 st.markdown("✨ **探索自然，從身邊的植物開始！**")
