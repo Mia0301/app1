@@ -67,7 +67,7 @@ elif choice == "註冊":
 if "user" in st.session_state:
     st.sidebar.write(f"✅ 已登入：{st.session_state['user']}")
 
-model = YOLO('yolov8s.pt')
+model = YOLO('yolov5s.pt')
 
 plant_info = {
     "Adenium_obesum": {
