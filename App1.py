@@ -627,11 +627,6 @@ if image is not None:
         st.write("未能辨識出植物")
 else:
     st.write("請先上傳或拍攝圖片")
-
-if plant_name and plant_info and plant_name in plant_info:
-    # your code here
-else:
-    print("Either plant_name or plant_info is missing or invalid")
     
 st.sidebar.subheader(history_label)
 if len(st.session_state["history"]) > 0:
