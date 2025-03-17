@@ -594,7 +594,7 @@ if image is not None:
 
         # 顯示最高準確率的植物資訊
         st.markdown(f"**植物學名：{plant_name}** (信心分數：{confidence:.2f})")
-plant_name= model.names[int(best_prediction[5])]
+
         if plant_name in plant_info:
             info = plant_info[plant_name]
             # 🌿 標題
