@@ -629,6 +629,15 @@ else:
     st.write("請先上傳或拍攝圖片")
 
 
+print(f"plant_name: {plant_name}")
+print(f"plant_info: {plant_info}")
+
+if plant_name and plant_info and plant_name in plant_info:
+    # your code here
+else:
+    print("Either plant_name or plant_info is missing or invalid")
+
+
 st.sidebar.subheader(history_label)
 if len(st.session_state["history"]) > 0:
     for idx, (img, plants) in enumerate(st.session_state["history"]):
