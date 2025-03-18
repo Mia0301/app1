@@ -5,6 +5,7 @@ from PIL import Image
 from ultralytics import YOLO
 import sqlite3
 import hashlib
+st.set_page_config(page_title="花草辨識小助理", page_icon="🌱", layout="wide")
 
 # 初始化 SQLite 資料庫
 conn = sqlite3.connect("users.db", check_same_thread=False)
@@ -66,8 +67,6 @@ elif choice == "註冊":
 if "user" in st.session_state:
     st.sidebar.write(f"✅ 已登入：{st.session_state['user']}")
 
-import streamlit as st
-st.set_page_config(page_title="花草辨識小助理", page_icon="🌱", layout="wide")
 model = YOLO('best.pt')
 st.title("🌿 花草辨識小助理")
 st.write("探索校園的植物世界，學習植物知識，感受自然之美！")
