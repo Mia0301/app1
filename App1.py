@@ -8,7 +8,7 @@ import sqlite3
 import hashlib
 
 st.set_page_config(page_title="花草辨識小助理", page_icon="🌱", layout="wide")
-model = YOLO('bestff.pt')
+model = YOLO('best.pt')
 st.title("🌿 花草辨識小助理")
 st.write("探索校園的植物世界，學習植物知識，感受自然之美！")
 
