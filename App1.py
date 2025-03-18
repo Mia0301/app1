@@ -3,12 +3,72 @@ import torch
 import numpy as np
 from PIL import Image
 from ultralytics import YOLO
-import streamlit as st
 import sqlite3
 import hashlib
 
+# 初始化 SQLite 資料庫
+conn = sqlite3.connect("users.db", check_same_thread=False)
+cursor = conn.cursor()
+cursor.execute('''CREATE TABLE IF NOT EXISTS users (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    username TEXT UNIQUE,
+                    password TEXT)''')
+conn.commit()
+
+# 密碼加密
+def hash_password(password):
+    return hashlib.sha256(password.encode()).hexdigest()
+
+# 註冊功能
+def register_user(username, password):
+    try:
+        cursor.execute("INSERT INTO users (username, password) VALUES (?, ?)", 
+                       (username, hash_password(password)))
+        conn.commit()
+        return True
+    except sqlite3.IntegrityError:
+        return False
+
+# 登入功能
+def login_user(username, password):
+    cursor.execute("SELECT * FROM users WHERE username = ? AND password = ?", 
+                   (username, hash_password(password)))
+    return cursor.fetchone()
+
+# 登入介面
+st.title("🔑 使用者登入")
+menu = ["登入", "註冊"]
+choice = st.sidebar.selectbox("選擇操作", menu)
+
+if choice == "登入":
+    st.subheader("📥 登入系統")
+    username = st.text_input("使用者名稱")
+    password = st.text_input("密碼", type="password")
+    if st.button("登入"):
+        user = login_user(username, password)
+        if user:
+            st.session_state["user"] = username  # 設定 session
+            st.success(f"歡迎，{username}！")
+        else:
+            st.error("帳號或密碼錯誤")
+
+elif choice == "註冊":
+    st.subheader("📝 註冊新帳號")
+    new_username = st.text_input("使用者名稱")
+    new_password = st.text_input("密碼", type="password")
+    if st.button("註冊"):
+        if register_user(new_username, new_password):
+            st.success("註冊成功！請回到登入頁面登入")
+        else:
+            st.error("使用者名稱已被註冊")
+
+# 如果登入成功，顯示個人辨識紀錄
+if "user" in st.session_state:
+    st.sidebar.write(f"✅ 已登入：{st.session_state['user']}")
+
+import streamlit as st
 st.set_page_config(page_title="花草辨識小助理", page_icon="🌱", layout="wide")
-model = YOLO('yolov5s.pt')
+model = YOLO('best.pt')
 st.title("🌿 花草辨識小助理")
 st.write("探索校園的植物世界，學習植物知識，感受自然之美！")
 
@@ -695,62 +755,3 @@ else:
 st.markdown("---")
 st.markdown("✨ **探索自然，從身邊的植物開始！**")
 
-# 初始化 SQLite 資料庫
-conn = sqlite3.connect("users.db", check_same_thread=False)
-cursor = conn.cursor()
-cursor.execute('''CREATE TABLE IF NOT EXISTS users (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    username TEXT UNIQUE,
-                    password TEXT)''')
-conn.commit()
-
-# 密碼加密
-def hash_password(password):
-    return hashlib.sha256(password.encode()).hexdigest()
-
-# 註冊功能
-def register_user(username, password):
-    try:
-        cursor.execute("INSERT INTO users (username, password) VALUES (?, ?)", 
-                       (username, hash_password(password)))
-        conn.commit()
-        return True
-    except sqlite3.IntegrityError:
-        return False
-
-# 登入功能
-def login_user(username, password):
-    cursor.execute("SELECT * FROM users WHERE username = ? AND password = ?", 
-                   (username, hash_password(password)))
-    return cursor.fetchone()
-
-# 登入介面
-st.title("🔑 使用者登入")
-menu = ["登入", "註冊"]
-choice = st.sidebar.selectbox("選擇操作", menu)
-
-if choice == "登入":
-    st.subheader("📥 登入系統")
-    username = st.text_input("使用者名稱")
-    password = st.text_input("密碼", type="password")
-    if st.button("登入"):
-        user = login_user(username, password)
-        if user:
-            st.session_state["user"] = username  # 設定 session
-            st.success(f"歡迎，{username}！")
-        else:
-            st.error("帳號或密碼錯誤")
-
-elif choice == "註冊":
-    st.subheader("📝 註冊新帳號")
-    new_username = st.text_input("使用者名稱")
-    new_password = st.text_input("密碼", type="password")
-    if st.button("註冊"):
-        if register_user(new_username, new_password):
-            st.success("註冊成功！請回到登入頁面登入")
-        else:
-            st.error("使用者名稱已被註冊")
-
-# 如果登入成功，顯示個人辨識紀錄
-if "user" in st.session_state:
-    st.sidebar.write(f"✅ 已登入：{st.session_state['user']}")
