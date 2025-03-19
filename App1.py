@@ -68,6 +68,8 @@ if "user" in st.session_state:
     st.sidebar.write(f"✅ 已登入：{st.session_state['user']}")
 
 model = YOLO('best.pt')
+model.eval() 
+
 st.title("🌿 花草辨識小助理")
 st.write("探索校園的植物世界，學習植物知識，感受自然之美！")
 
